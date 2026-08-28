@@ -1,0 +1,100 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 24,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {}
+    },
+    {
+      "name": "plugin-base",
+      "hidden": true,
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+        "VCPKG_MANIFEST_DIR": "${sourceDir}/lib/commonlibsse-ng",
+        "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": "ON",
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
+        "DYNAMICFUR_DEPLOY": "OFF"
+      }
+    },
+    {
+      "name": "x64-Debug",
+      "displayName": "x64 Debug",
+      "inherits": "plugin-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "DYNAMICFUR_BUILD_PLUGIN": "ON",
+        "DYNAMICFUR_BUILD_TESTS": "ON"
+      }
+    },
+    {
+      "name": "x64-Release",
+      "displayName": "x64 Release",
+      "inherits": "plugin-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "DYNAMICFUR_BUILD_PLUGIN": "ON",
+        "DYNAMICFUR_BUILD_TESTS": "ON"
+      }
+    },
+    {
+      "name": "core-Debug",
+      "displayName": "Core-only Debug",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "DYNAMICFUR_BUILD_PLUGIN": "OFF",
+        "DYNAMICFUR_BUILD_TESTS": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "x64-Debug",
+      "configurePreset": "x64-Debug"
+    },
+    {
+      "name": "x64-Release",
+      "configurePreset": "x64-Release"
+    },
+    {
+      "name": "core-Debug",
+      "configurePreset": "core-Debug"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "x64-Debug",
+      "configurePreset": "x64-Debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "x64-Release",
+      "configurePreset": "x64-Release",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "core-Debug",
+      "configurePreset": "core-Debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}
